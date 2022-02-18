@@ -46,6 +46,9 @@ services:
       traefik.http.routers.traefik-dashboard-http-router.entrypoints: http
       traefik.http.routers.traefik-dashboard-http-router.rule: Host(`$DOMAIN_NAME`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       traefik.http.routers.traefik-dashboard-http-router.service: api@internal
+      # Authentication for Dashboard
+      traefik.http.middlewares.traefik-dashboard-auth.basicauth.users: $TRAEFIK_DASHBOARD_AUTH
+      traefik.http.routers.traefik-dashboard-http-router.middlewares: traefik-dashboard-auth
 
   whoami:
     image: traefik/whoami
