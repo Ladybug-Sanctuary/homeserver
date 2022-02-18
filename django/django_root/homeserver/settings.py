@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,8 @@ SECRET_KEY = 'django-insecure-$qfn*nyj0&!$3%c&wfqgwno=rx%h(l_8%(p3(@wr5x8dy!=(kr
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+if (DOMAIN_NAME := os.environ.get('DOMAIN_NAME')) is not None:
+    ALLOWED_HOSTS.append(DOMAIN_NAME)
 
 # Application definition
 

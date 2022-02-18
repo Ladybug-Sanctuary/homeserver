@@ -67,3 +67,18 @@ services:
       traefik.enable: true
       traefik.http.routers.whoami.entrypoints: http
       traefik.http.routers.whoami.rule: Host(`$DOMAIN_NAME`) && PathPrefix(`/whoami`)
+
+  django:
+    build: ./django
+    command:
+      - runserver
+      - 0.0.0.0:80
+    expose:
+      - 80
+    environment:
+      # Specify the domain name (Required for Django's ALLOWED_HOSTS)
+      - DOMAIN_NAME=$DOMAIN_NAME
+    labels:
+      traefik.enable: true
+      traefik.http.routers.django-http-router.entrypoints: http
+      traefik.http.routers.django-http-router.rule: Host(`$DOMAIN_NAME`)
