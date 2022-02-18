@@ -22,6 +22,7 @@ services:
     restart: unless-stopped
     ports:
       - 80:80
+      - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
@@ -33,6 +34,7 @@ services:
       - --providers.docker.exposedByDefault=false
       # Set port number for HTTP
       - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
       # Logging
       - --log.level=DEBUG
       # Enable API & Dashboard
@@ -43,12 +45,20 @@ services:
       #
       traefik.enable: true
       # Create a router for the API & Dashboard
+      # \-> HTTPS
+      traefik.http.routers.traefik-dashboard-https-router.entrypoints: https
+      traefik.http.routers.traefik-dashboard-https-router.rule: Host(`$DOMAIN_NAME`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      traefik.http.routers.traefik-dashboard-https-router.service: api@internal
+      # \-> Certificate
+      traefik.http.routers.traefik-dashboard-https-router.tls.domains.main: $DOMAIN_NAME
+      # \-> Authentication for Dashboard
+      traefik.http.middlewares.traefik-dashboard-auth.basicauth.users: $TRAEFIK_DASHBOARD_AUTH
+      traefik.http.routers.traefik-dashboard-https-router.middlewares: traefik-dashboard-auth
+      # \-> HTTP
+      traefik.http.middlewares.traefik-dashboard-redirect.redirectscheme.scheme: https
       traefik.http.routers.traefik-dashboard-http-router.entrypoints: http
       traefik.http.routers.traefik-dashboard-http-router.rule: Host(`$DOMAIN_NAME`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
-      traefik.http.routers.traefik-dashboard-http-router.service: api@internal
-      # Authentication for Dashboard
-      traefik.http.middlewares.traefik-dashboard-auth.basicauth.users: $TRAEFIK_DASHBOARD_AUTH
-      traefik.http.routers.traefik-dashboard-http-router.middlewares: traefik-dashboard-auth
+      traefik.http.routers.traefik-dashboard-http-router.middlewares: traefik-dashboard-redirect
 
   whoami:
     image: traefik/whoami
