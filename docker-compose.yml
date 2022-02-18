@@ -15,3 +15,42 @@ services:
       - LOG_FILE=true
     volumes:
       - ./duckdns/config:/config
+
+  traefik:
+    image: traefik:v2.6
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      # Put the STATIC configuration here
+      #
+      # Use docker
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      # Require every container to enable traefik with label "traefik.enable: true"
+      - --providers.docker.exposedByDefault=false
+      # Set port number for HTTP
+      - --entrypoints.http.address=:80
+      # Logging
+      - --log.level=DEBUG
+      # Enable API & Dashboard
+      - --api=true
+      - --api.dashboard=true
+    labels:
+      # Put the DYNAMIC configuration here (and use labels for other containers, too)
+      #
+      traefik.enable: true
+      # Create a router for the API & Dashboard
+      traefik.http.routers.traefik-dashboard-http-router.entrypoints: http
+      traefik.http.routers.traefik-dashboard-http-router.rule: Host(`$DOMAIN_NAME`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      traefik.http.routers.traefik-dashboard-http-router.service: api@internal
+
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    labels:
+      traefik.enable: true
+      traefik.http.routers.whoami.entrypoints: http
+      traefik.http.routers.whoami.rule: Host(`$DOMAIN_NAME`) && PathPrefix(`/whoami`)
