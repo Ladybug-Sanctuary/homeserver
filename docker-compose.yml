@@ -78,6 +78,7 @@ services:
     environment:
       # Specify the domain name (Required for Django's ALLOWED_HOSTS)
       - DOMAIN_NAME=$DOMAIN_NAME
+      - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
     labels:
       traefik.enable: true
       traefik.http.routers.django-http-router.entrypoints: http
