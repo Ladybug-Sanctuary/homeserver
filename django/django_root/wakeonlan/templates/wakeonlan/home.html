@@ -1,0 +1,11 @@
+{% extends "wakeonlan/base.html" %}
+
+{% block content %}
+  <div class="content">
+    <h1>Wake on LAN</h1>
+
+    <div>
+      <a href="{% url 'wol-wake' %}">Wake</a> a devices
+    </div>
+  </div>
+{% endblock content %}

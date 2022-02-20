@@ -6,7 +6,7 @@ from .forms import DeviceForm
 
 
 def home(request):
-    return HttpResponse('<h1>Wake on LAN</h1>')
+    return render(request, 'wakeonlan/home.html')
 
 
 def wake(request):

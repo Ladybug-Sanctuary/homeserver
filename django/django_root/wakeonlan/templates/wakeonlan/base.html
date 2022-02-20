@@ -1,11 +1,23 @@
-<!-- Display any messages -->
-{% if messages %}
-  {% for message in messages %}
-    <div style="background-color: #80bfff">
-      {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
+{% extends "base.html" %}
 
-<!-- Placeholder block for content -->
-{% block content %}{% endblock %}
+<!-- Page's main body -->
+{% block main %}
+
+  <!-- Display any messages at the top -->
+  {% if messages %}
+    {% for message in messages %}
+      <div role="alert" class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Main part of the page content -->
+  <main role="main" class="container">
+
+    <!-- The specific content goes here -->
+    {% block content %}{% endblock %}
+
+  </main>
+
+{% endblock %}
