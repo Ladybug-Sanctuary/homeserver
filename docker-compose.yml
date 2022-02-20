@@ -77,7 +77,7 @@ services:
       - 80
     environment:
       # Specify the domain name (Required for Django's ALLOWED_HOSTS)
-      - DOMAIN_NAME=$DOMAIN_NAME
+      - DJANGO_ALLOWED_HOSTS=$DOMAIN_NAME
       - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
     labels:
       traefik.enable: true

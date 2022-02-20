@@ -26,9 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-if (DOMAIN_NAME := os.environ.get('DOMAIN_NAME')) is not None:
-    ALLOWED_HOSTS.append(DOMAIN_NAME)
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 
