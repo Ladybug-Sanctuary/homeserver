@@ -1,0 +1,25 @@
+{% extends "wakeonlan/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div>
+    <form method="post" enctype="multipart/form-data">
+
+      <!-- Cross-Site Request Forgery token -->
+      {% csrf_token %}
+
+      <!-- Form containing device information -->
+      <fieldset>
+        <legend>Device Network Address</legend>
+        {{ form|crispy }}
+      </fieldset>
+
+      <!-- Button to submit the form -->
+      <div>
+        <button type="submit">Wake</button>
+      </div>
+
+    </form>
+  </div>
+{% endblock content %}

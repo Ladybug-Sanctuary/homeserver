@@ -1,0 +1,11 @@
+<!-- Display any messages -->
+{% if messages %}
+  {% for message in messages %}
+    <div style="background-color: #80bfff">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Placeholder block for content -->
+{% block content %}{% endblock %}
